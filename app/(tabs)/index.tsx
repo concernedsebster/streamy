@@ -6,6 +6,7 @@ import SearchBar from "../../components/SearchBar";
 import { useRouter } from "expo-router";
 import useFetch from "../../services/useFetch";
 import { fetchMovies } from "../../services/api";
+import { useEffect } from "react";
 
 export default function Index() {
   const router = useRouter();
@@ -13,10 +14,30 @@ export default function Index() {
   const { 
     data: movies, 
     loading: moviesLoading, 
-    error: moviesError } = useFetch(() => fetchMovies({
+    error: moviesError 
+  } = useFetch(() => fetchMovies({
     query: ''
-  }))
-  
+  }));
+
+  // Add more detailed logging
+  console.log('Full Component State:', {
+    isLoading: moviesLoading,
+    hasError: !!moviesError,
+    errorMessage: moviesError?.message,
+    hasData: !!movies,
+    movieCount: movies?.length,
+    firstMovie: movies?.[0]
+  });
+
+  // Add useEffect to track state changes
+  useEffect(() => {
+    if (moviesLoading) {
+      console.log('Loading started');
+    } else {
+      console.log('Loading finished');
+    }
+  }, [moviesLoading]);
+
   return (
     <View className="flex-1
     bg-primary">
@@ -40,21 +61,26 @@ export default function Index() {
           />
           <>
         <Text className="text-lg text-white font-bold mt-5 mb-3">Latest Movies</Text>
+        <Text style={{ color: '#FFFFFF' }}>Test White Text</Text>
         <FlatList
-        data={movies}
-        renderItem={({item }) => (
-          <Text className="text-white text-sm">{item.title}</Text>
-        )}
-        keyExtractor={(item) => item.id .toString()} 
-        numColumns={3}
-        columnWrapperStyle={{
-          justifyContent: 'flex-start',
-          gap: 20,
-          paddingRight: 5,
-          marginBottom: 10
-        }} 
-        className="mt-2 pb-32"
-        scrollEnabled={false}
+          data={movies}
+          renderItem={({ item }) => (
+            <View className="flex-1 p-2">
+              <Text className="text-white text-lg font-bold">
+                {item.title}
+              </Text>
+            </View>
+          )}
+          keyExtractor={(item) => item.id.toString()} 
+          numColumns={3}
+          columnWrapperStyle={{
+            justifyContent: 'flex-start',
+            gap: 20,
+            paddingRight: 5,
+            marginBottom: 10
+          }} 
+          className="mt-2 pb-32"
+          scrollEnabled={false}
         />
         </>
         </View>
