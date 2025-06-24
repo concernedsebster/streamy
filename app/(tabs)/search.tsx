@@ -81,9 +81,14 @@ return () => clearTimeout(timeoutId);
         ListEmptyComponent={
           !loadMovies && !moviesError ? (
             <View className='mt-10 px-5'>
-              <Text className='text-center text-gray-500'>
-                {searchQuery.trim() ? 'No content found' : 'Search for content'}
-              </Text>
+              <Text
+              style={{
+                textAlign: 'center',
+                color: '#6B7280', // This is Tailwind's gray-500 hex
+              }}
+              >
+  {searchQuery.trim() ? 'No content found' : 'Search for content'}
+</Text>
               </View>
           ) : null
         }
