@@ -7,10 +7,11 @@ import { useRouter } from "expo-router";
 import MovieCard from '@/components/MovieCard'
 import { icons } from '@/constants/icons'
 import SearchBar from '@/components/SearchBar'
+import { updateSearchCount } from '@/services/appwrite'
 
 const Search = () => {
 
-  const [searchQuery, setSearchQuery] = React.useState(' ')
+  const [searchQuery, setSearchQuery] = React.useState('');
 
   const router = useRouter();
 
@@ -26,6 +27,9 @@ const Search = () => {
 
   useEffect(()=> {
     const timeoutId = setTimeout(async () => {
+      if ((movies ?? []).length > 0 && movies?.[0]) {
+      await updateSearchCount(searchQuery, movies[0]);
+    }
     if (searchQuery.trim()) {
       await loadMovies()
     } else {
